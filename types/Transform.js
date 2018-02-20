@@ -8,6 +8,7 @@
  */
 
 import type {Path, ProjectConfig} from 'types/Config';
+import type {Module} from 'types/Module';
 import type {Script} from 'vm';
 
 export type TransformedSource = {|
@@ -24,6 +25,7 @@ export type TransformResult = {|
 export type TransformOptions = {|
   instrument: boolean,
   returnSourceString?: boolean,
+  localModule?: Module,
 |};
 
 export type CacheKeyOptions = {|

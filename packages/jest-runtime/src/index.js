@@ -15,6 +15,7 @@ import type {Context} from 'types/Context';
 import type {Jest, LocalModuleRequire} from 'types/Jest';
 import type {ModuleMap} from 'jest-haste-map';
 import type {MockFunctionMetadata, ModuleMocker} from 'types/Mock';
+import type {Module} from 'types/Module';
 
 import path from 'path';
 import HasteMap from 'jest-haste-map';
@@ -27,17 +28,6 @@ import ScriptTransformer from './script_transformer';
 import shouldInstrument from './should_instrument';
 import {run as cilRun} from './cli';
 import {options as cliOptions} from './cli/args';
-
-type Module = {|
-  children: Array<Module>,
-  exports: any,
-  filename: string,
-  id: string,
-  loaded: boolean,
-  parent?: Module,
-  paths?: Array<Path>,
-  require?: (id: string) => any,
-|};
 
 type HasteMapOptions = {|
   console?: Console,
@@ -529,6 +519,7 @@ class Runtime {
         collectCoverageFrom: this._coverageOptions.collectCoverageFrom,
         collectCoverageOnlyFrom: this._coverageOptions.collectCoverageOnlyFrom,
         isInternalModule,
+        localModule,
       },
       this._cacheFS[filename],
     );

@@ -13,6 +13,7 @@ import type {
   TransformedSource,
   TransformResult,
 } from 'types/Transform';
+import type {Module} from 'types/Module';
 
 import crypto from 'crypto';
 import path from 'path';
@@ -36,6 +37,7 @@ export type Options = {|
   collectCoverageOnlyFrom: ?{[key: string]: boolean, __proto__: null},
   isCoreModule?: boolean,
   isInternalModule?: boolean,
+  localModule?: Module,
 |};
 
 const cache: Map<string, TransformResult> = new Map();
@@ -177,7 +179,12 @@ export default class ScriptTransformer {
     }
   }
 
-  transformSource(filepath: Path, content: string, instrument: boolean) {
+  transformSource(
+    filepath: Path,
+    content: string,
+    instrument: boolean,
+    localModule?: string,
+  ) {
     const filename = this._getRealPath(filepath);
     const transform = this._getTransformer(filename);
     const cacheFilePath = this._getFileCachePath(filename, content, instrument);
@@ -217,6 +224,7 @@ export default class ScriptTransformer {
     if (transform && shouldCallTransform) {
       const processed = transform.process(content, filename, this._config, {
         instrument,
+        localModule,
         returnSourceString: false,
       });
 
